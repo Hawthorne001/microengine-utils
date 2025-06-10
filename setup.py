@@ -19,8 +19,8 @@ setup(
     install_requires=[
         'datadog~=0.36.0',
         'polyswarm-artifact~=1.4.2',
-        'pydantic~=1.6.1',
-        'requests~=2.22.0',
+        'pydantic>=1.6.1,<2.12.0',
+        'requests>=2.22,<2.33',
     ],
     tests_require=[
         'pytest~=5.4.2',
