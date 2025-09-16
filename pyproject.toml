@@ -11,7 +11,6 @@ authors = [
 ]
 classifiers = [
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
@@ -25,7 +24,7 @@ dependencies = [
     "pydantic>=1.6.1",
     "requests>=2.22.0",
 ]
-license = {text = "MIT"}
+license = "MIT"
 
 [project.urls]
 Homepage = "https://github.com/polyswarm/microengine-utils"
