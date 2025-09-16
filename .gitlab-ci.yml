@@ -23,7 +23,7 @@ dev-pypi:
     - stage-kube-newer
   stage: build
   before_script:
-    - pip3 install -q --upgrade pip setuptools twine wheel bump2version
+    - pip3 install -q --upgrade pip build setuptools twine wheel bump2version
   script:
     - SHORT_SHA=$(git rev-parse --short HEAD) bumpversion --no-commit --no-tag local
     - python -m build
