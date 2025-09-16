@@ -1,17 +1,18 @@
 import asyncio
-from contextlib import suppress
+import datadog
 import functools
 import json
 import os
 import re
+
+from contextlib import suppress
 from time import perf_counter
 from typing import Callable, List, Mapping, Optional, Sequence, cast
+from pydantic import BaseModel, Field
 
-import datadog
 
 from polyswarmartifact import ArtifactType
 from polyswarmartifact.schema.verdict import Verdict
-from polyswarmclient.abstractscanner import AbstractScanner, ScanResult
 
 from .config import EngineInfo
 from .constants import (
@@ -23,6 +24,14 @@ from .constants import (
     SCAN_VERDICT,
 )
 from .errors import BaseScanError, CalledProcessScanError
+
+
+class ScanResult(BaseModel):
+    """Mimics polyswarmclient.abstractscanner::ScanResult for duck-typing"""
+    bit: bool
+    verdict: bool
+    confidence: float = 1.0
+    metadata: Verdict = Field(default_factory=lambda: Verdict().set_malware_family('').json())
 
 
 async def create_scanner_exec(
@@ -43,7 +52,7 @@ async def create_scanner_exec(
         streams = await proc.communicate()
         if check and proc.returncode != 0:
             raise CalledProcessScanError(cmd, f'Non-zero return code: {proc.returncode}')
-        sout, serr = (s.decode(errors='ignore') for s in streams)
+        sout, serr = (s.decode(errors='ignore') if s else None for s in streams)
         return proc.returncode, sout, serr
     except (FileNotFoundError, BrokenPipeError, ConnectionResetError) as e:  # noqa
         proc.kill()
