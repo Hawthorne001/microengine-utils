@@ -33,10 +33,10 @@ dev-pypi:
 # Test Stage
 ###############################################################
 
-test-run36:
+test-run39:
   tags:
     - kube-small-new
-  image: python:3.6
+  image: python:3.9
   stage: test
   before_script:
     - pip3 install --upgrade pip
@@ -45,10 +45,10 @@ test-run36:
     - pip3 install .
     - pytest -s -v
 
-test-run37:
+test-run310:
   tags:
     - kube-small-new
-  image: python:3.7
+  image: python:3.10
   stage: test
   before_script:
     - pip3 install --upgrade pip
@@ -57,10 +57,10 @@ test-run37:
     - pip3 install .
     - pytest -s -v
 
-test-run38:
+test-run311:
   tags:
     - kube-small-new
-  image: python:3.8
+  image: python:3.11
   stage: test
   before_script:
     - pip3 install --upgrade pip
@@ -68,6 +68,43 @@ test-run38:
     - pip3 install -r requirements.txt
     - pip3 install .
     - pytest -s -v
+
+test-run312:
+  tags:
+    - kube-small-new
+  image: python:3.12
+  stage: test
+  before_script:
+    - pip3 install --upgrade pip
+  script:
+    - pip3 install -r requirements.txt
+    - pip3 install .
+    - pytest -s -v
+
+test-run313:
+  tags:
+    - kube-small-new
+  image: python:3.13
+  stage: test
+  before_script:
+    - pip3 install --upgrade pip
+  script:
+    - pip3 install -r requirements.txt
+    - pip3 install .
+    - pytest -s -v
+
+test-run314:
+  tags:
+    - kube-small-new
+  image: python:3.14
+  stage: test
+  before_script:
+    - pip3 install --upgrade pip
+  script:
+    - pip3 install -r requirements.txt
+    - pip3 install .
+    - pytest -s -v
+  allow_failure: true
 
 ###############################################################
 # Release Stage
