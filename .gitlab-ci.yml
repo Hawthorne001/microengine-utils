@@ -26,7 +26,7 @@ dev-pypi:
     - pip3 install -q --upgrade pip setuptools twine wheel bump2version
   script:
     - SHORT_SHA=$(git rev-parse --short HEAD) bumpversion --no-commit --no-tag local
-    - python setup.py -q bdist_wheel sdist
+    - python -m build
     - twine upload --skip-existing --disable-progress-bar --non-interactive dist/*
 
 ###############################################################
