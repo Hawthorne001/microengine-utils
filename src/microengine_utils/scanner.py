@@ -38,6 +38,8 @@ class ScanResult(BaseModel):
     def metadata_from_jsonstr(cls, value):
         if isinstance(value, str):
             return Verdict.parse_raw(value)
+        elif value is None:
+            return {}
         else:
             return value
 
