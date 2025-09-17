@@ -8,7 +8,11 @@ import re
 from contextlib import suppress
 from time import perf_counter
 from typing import Callable, List, Mapping, Optional, Sequence, cast
-from pydantic import BaseModel, Field, validator
+
+try:
+    from pydantic.v1 import BaseModel, Field, validator
+except ImportError:
+    from pydantic import BaseModel, Field, validator
 
 
 from polyswarmartifact import ArtifactType
