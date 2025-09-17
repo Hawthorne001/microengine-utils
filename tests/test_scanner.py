@@ -11,13 +11,12 @@ from microengine_utils.constants import (
     SCAN_VERDICT,
 )
 from microengine_utils.errors import UnprocessableScanError
-from microengine_utils.scanner import each_match, scanalytics
+from microengine_utils.scanner import each_match, scanalytics, ScanResult
 import pytest
 import itertools
 
 from polyswarmartifact import ArtifactType
 from polyswarmartifact.schema.verdict import Verdict
-from polyswarmclient.abstractscanner import ScanResult
 from contextlib import suppress
 
 
@@ -60,7 +59,7 @@ def scan_result(request, scan_metadata):
 
 @pytest.mark.parametrize('verbose_metrics', [True, False], ids=['verbose', 'quiet'])
 @pytest.mark.parametrize('artifact_kind', [ArtifactType.FILE, ArtifactType.URL])
-@pytest.mark.parametrize('use_async', [False] if version_info < (3, 7) else [False, True], ids=lambda p: 'async' if p else 'sync')
+@pytest.mark.parametrize('use_async', [False, True], ids=lambda p: 'async' if p else 'sync')
 def test_scanalytics(statsd, engine_info, use_async, scan_result, verbose_metrics, artifact_kind):
     is_error = isinstance(scan_result, Exception)
     args = (None, str(uuid4()), artifact_kind, b'content', {}, 'home')

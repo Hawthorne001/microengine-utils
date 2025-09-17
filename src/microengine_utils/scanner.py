@@ -8,7 +8,7 @@ import re
 from contextlib import suppress
 from time import perf_counter
 from typing import Callable, List, Mapping, Optional, Sequence, cast
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 
 from polyswarmartifact import ArtifactType
@@ -32,6 +32,14 @@ class ScanResult(BaseModel):
     verdict: bool
     confidence: float = 1.0
     metadata: Verdict = Field(default_factory=lambda: Verdict().set_malware_family('').json())
+
+    @validator('metadata', pre=True)
+    @classmethod
+    def metadata_from_jsonstr(cls, value):
+        if isinstance(value, str):
+            return Verdict.parse_raw(value)
+        else:
+            return value
 
 
 async def create_scanner_exec(
