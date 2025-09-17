@@ -32,7 +32,6 @@ Homepage = "https://github.com/polyswarm/microengine-utils"
 [project.optional-dependencies]
 tests = [
     "pytest>=8.4.0",
-    "polyswarm-client",
 ]
 content_type = [
     "puremagic",
