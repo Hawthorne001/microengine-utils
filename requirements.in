@@ -1,5 +1,5 @@
-bump2version==1.0.0
-polyswarm-artifact~=1.4
-pydantic~=1.6
+bump-my-version~=1.2
+polyswarm-artifact~=2.1
+pydantic>=2.0
 pytest~=8.4
 requests~=2.32

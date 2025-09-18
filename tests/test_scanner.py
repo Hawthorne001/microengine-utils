@@ -91,7 +91,7 @@ def test_scanalytics(statsd, engine_info, use_async, scan_result, verbose_metric
     assert result_meta.scanner.vendor_version == engine_info.engine_version
 
     if is_error:
-        assert result_meta.__dict__['scan_error'] == scan_result.event_name
+        assert result_meta.scan_error == scan_result.event_name
         assert result.bit is False
         statsd.increment.assert_called_once_with(
             SCAN_FAIL, tags=[type_tag, f'scan_error:{scan_result.event_name}']
