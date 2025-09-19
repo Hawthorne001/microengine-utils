@@ -25,7 +25,7 @@ dev-pypi:
   before_script:
     - pip3 install -q --upgrade pip build setuptools "twine<6.2" wheel bump2version "click<8.3"
   script:
-    - SHORT_SHA=$(git rev-parse --short HEAD) bumpversion --no-commit --no-tag local
+    - bump-my-version bump --no-commit --no-tag dev
     - python -m build
     - twine upload --skip-existing --disable-progress-bar --non-interactive dist/*
 
