@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Mapping, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from .constants import ENGINE_NAME, PLATFORM_MACHINE, PLATFORM_OS
 
@@ -57,23 +57,26 @@ class EngineInfo(BaseModel):
     engine_version: Optional[str] = Field(
         alias='vendor_version',
         description="captures the version of engine itself",
+        default=None,
     )
 
     definitions_version: Optional[str] = Field(
         alias='signatures_version',
         description="captures the version of the engine's signatures/definitions used",
+        default=None,
     )
 
     definitions_timestamp: Optional[Union[str, datetime]] = Field(
         alias='signatures_timestamp',
         description="captures the release date of the signatures/definitions used",
+        default=None,
     )
 
     def scanner_info(self) -> 'Mapping':
         """Returns a ``dict`` usable as ``Verdict.set_scanner_info`` kwargs"""
         return {
             k: v
-            for k, v in self.dict(by_alias=True, exclude_none=True, exclude_unset=True).items() if k in {
+            for k, v in self.model_dump(by_alias=True, exclude_none=True, exclude_unset=True).items() if k in {
                 'operating_system',
                 'architecture'
                 'version',
@@ -88,12 +91,13 @@ class EngineInfo(BaseModel):
         return '{} <{!s}>'.format(self.definitions_version, self.definitions_timestamp)
 
     def update(self, **kwargs):
-        for name, field in self.__fields__.items():
+        for name, field in self.model_fields.items():
             if name in kwargs:
                 setattr(self, name, kwargs[name])
             elif field.alias in kwargs:
                 setattr(self, name, kwargs[field.alias])
 
-    class Config:
-        allow_mutation = True
-        allow_population_by_field_name = True
+    model_config = ConfigDict(
+        validate_assignment=True,
+        populate_by_name=True,
+    )

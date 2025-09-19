@@ -1,0 +1,5 @@
+bump-my-version~=1.2
+polyswarm-artifact~=2.2
+pydantic>=2.0
+pytest~=8.4
+requests~=2.32

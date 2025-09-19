@@ -7,8 +7,9 @@ import re
 
 from contextlib import suppress
 from time import perf_counter
-from typing import Callable, List, Mapping, Optional, Sequence, cast
-from pydantic import BaseModel, Field
+from typing import Any, Callable, List, Mapping, Optional, Sequence, Union, cast
+
+from pydantic import BaseModel, Field, field_validator
 
 
 from polyswarmartifact import ArtifactType
@@ -31,7 +32,17 @@ class ScanResult(BaseModel):
     bit: bool
     verdict: bool
     confidence: float = 1.0
-    metadata: Verdict = Field(default_factory=lambda: Verdict().set_malware_family('').json())
+    metadata: Union[Verdict, str, bool, None] = Field(default_factory=lambda: Verdict().set_malware_family('').json())
+
+    @field_validator('metadata', mode='before')
+    @classmethod
+    def metadata_from_jsonstr(cls, value):
+        if isinstance(value, str):
+            return Verdict.parse_raw(value)
+        elif value in (None, True, False):
+            return Verdict(malware_family='').json()
+        else:
+            return value
 
 
 async def create_scanner_exec(
@@ -130,10 +141,15 @@ def scanalytics(
             elif scan.bit is False:
                 try:
                     # Treat any scan result w/ bit=False & 'scan_error' in metadata as an error
-                    statsd.increment(SCAN_FAIL, tags=[
-                        type_tag,
-                        'scan_error:%s' % extract_verdict(scan).__dict__['scan_error']
-                    ])
+                    verdict = extract_verdict(scan)
+                    scan_error = getattr(verdict, 'scan_error', None)
+                    if scan_error:
+                        statsd.increment(SCAN_FAIL, tags=[
+                            type_tag,
+                            'scan_error:%s' % scan_error
+                        ])
+                    else:
+                        statsd.increment(SCAN_NO_RESULT, tags=[type_tag])
                 except (AttributeError, KeyError):
                     # otherwise, the engine is just reporting no result
                     statsd.increment(SCAN_NO_RESULT, tags=[type_tag])

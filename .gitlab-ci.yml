@@ -20,23 +20,23 @@ default:
 
 dev-pypi:
   tags:
-    - kube-small-new
+    - stage-kube-newer
   stage: build
   before_script:
-    - pip3 install -q --upgrade pip setuptools twine wheel bump2version
+    - pip3 install -q --upgrade pip build setuptools "twine<6.2" wheel bump-my-version "click<8.3"
   script:
-    - SHORT_SHA=$(git rev-parse --short HEAD) bumpversion --no-commit --no-tag local
-    - python setup.py -q bdist_wheel
+    - bump-my-version bump --no-commit --no-tag dev
+    - python -m build
     - twine upload --skip-existing --disable-progress-bar --non-interactive dist/*
 
 ###############################################################
 # Test Stage
 ###############################################################
 
-test-run36:
+test-run310:
   tags:
-    - kube-small-new
-  image: python:3.6
+    - stage-kube-newer
+  image: python:3.10
   stage: test
   before_script:
     - pip3 install --upgrade pip
@@ -45,10 +45,10 @@ test-run36:
     - pip3 install .
     - pytest -s -v
 
-test-run37:
+test-run311:
   tags:
-    - kube-small-new
-  image: python:3.7
+    - stage-kube-newer
+  image: python:3.11
   stage: test
   before_script:
     - pip3 install --upgrade pip
@@ -57,10 +57,10 @@ test-run37:
     - pip3 install .
     - pytest -s -v
 
-test-run38:
+test-run312:
   tags:
-    - kube-small-new
-  image: python:3.8
+    - stage-kube-newer
+  image: python:3.12
   stage: test
   before_script:
     - pip3 install --upgrade pip
@@ -68,6 +68,31 @@ test-run38:
     - pip3 install -r requirements.txt
     - pip3 install .
     - pytest -s -v
+
+test-run313:
+  tags:
+    - stage-kube-newer
+  image: python:3.13
+  stage: test
+  before_script:
+    - pip3 install --upgrade pip
+  script:
+    - pip3 install -r requirements.txt
+    - pip3 install .
+    - pytest -s -v
+
+test-run314:
+  tags:
+    - stage-kube-newer
+  image: python:3.14
+  stage: test
+  before_script:
+    - pip3 install --upgrade pip
+  script:
+    - pip3 install -r requirements.txt
+    - pip3 install .
+    - pytest -s -v
+  allow_failure: true
 
 ###############################################################
 # Release Stage
@@ -75,7 +100,7 @@ test-run38:
 
 release-pypi:
   tags:
-    - kube-small-new
+    - stage-kube-newer
   stage: release
   script:
     # release to internal pypi but do not tag yet
