@@ -44,7 +44,7 @@ packaging==25.0
     # via pytest
 pluggy==1.6.0
     # via pytest
-polyswarm-artifact==2.2.0
+polyswarm-artifact==2.2.2
     # via
     #   -r requirements.in
     #   microengine-utils (pyproject.toml)
