@@ -33,18 +33,6 @@ dev-pypi:
 # Test Stage
 ###############################################################
 
-test-run39:
-  tags:
-    - stage-kube-newer
-  image: python:3.9
-  stage: test
-  before_script:
-    - pip3 install --upgrade pip
-  script:
-    - pip3 install -r requirements.txt
-    - pip3 install .
-    - pytest -s -v
-
 test-run310:
   tags:
     - stage-kube-newer
