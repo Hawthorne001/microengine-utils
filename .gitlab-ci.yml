@@ -27,7 +27,7 @@ dev-pypi:
   script:
     - SHORT_SHA=$(git rev-parse --short HEAD) bumpversion --no-commit --no-tag local
     - python -m build
-    - twine upload --disable-progress-bar --non-interactive dist/*
+    - twine upload --skip-existing --disable-progress-bar --non-interactive dist/*
 
 ###############################################################
 # Test Stage
