@@ -1,5 +1,5 @@
 [tool.bumpversion]
-current_version = "1.5.1"
+current_version = "1.6.0"
 commit = true
 tag = false
 sign_tags = true
@@ -14,6 +14,12 @@ serialize = [
 first_value = "0"
 optional_value = "0"
 
-[tool.bumpversion.file.pyproject.toml]
+[[tool.bumpversion.files]]
+filename = "src/microengine_utils/__init__.py"
+search = "__version__ = '{current_version}'"
+replace = "__version__ = '{new_version}'"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
 search = 'version = "{current_version}"'
 replace = 'version = "{new_version}"'
