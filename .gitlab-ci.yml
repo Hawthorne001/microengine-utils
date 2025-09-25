@@ -28,7 +28,6 @@ dev-pypi:
     - e2e init
   script:
     - bump-my-version bump --no-commit --no-tag dev
-    - python -m build
     - e2e release --dev --skip-tag
 
 ###############################################################
