@@ -3,7 +3,7 @@ package-dir = "src"
 
 [project]
 name = "microengine-utils"
-version = "1.6.0"
+version = "1.6.1"
 description = "Library for Polyswarm Microengine Utility Package"
 readme = "README.md"
 authors = [
